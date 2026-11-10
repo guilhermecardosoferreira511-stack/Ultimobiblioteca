@@ -1,0 +1,46 @@
+
+{% extends "base.html" %}
+
+{% block title %}Login - Biblioteca{% endblock %}
+
+{% block content %}
+
+<div class="auth-card">
+
+    <h2>📚 Minha Biblioteca</h2>
+    <p>Entre na sua conta para acessar seus livros.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <div class="mb-3">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" name="username"
+                   required autocomplete="username">
+        </div>
+
+        <div class="mb-3">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password"
+                   required autocomplete="current-password">
+        </div>
+
+        <button type="submit">Entrar</button>
+
+    </form>
+
+    <p>
+        Ainda não possui conta?
+        <a href="{{ url_for('auth.register') }}">Cadastre-se</a>
+    </p>
+
+</div>
+
+{% endblock %}

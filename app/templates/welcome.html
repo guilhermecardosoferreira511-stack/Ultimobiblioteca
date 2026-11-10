@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minha Biblioteca</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+
+        .navbar {
+            background: #34495e;
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,.08);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-excluir {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f3f5;
+        }
+
+        .mensagem {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #eaf2f8;
+        }
+
+        .acoes {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <strong>📚 Minha Biblioteca</strong>
+
+    <a href="{{ url_for('auth.logout') }}">Sair da conta</a>
+</header>
+
+<main class="container">
+
+    <h1>Olá, {{ usuario.username }}! 👋</h1>
+
+    <p>Seja bem-vindo(a) à sua biblioteca pessoal.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="mensagem">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <hr>
+
+    <h2>Meus livros ({{ livros|length }})</h2>
+
+    <a href="{{ url_for('auth.cadastrar_livro') }}" class="btn">
+        + Cadastrar novo livro
+    </a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Ano</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for livro in livros %}
+            <tr>
+                <td>{{ livro['id'] }}</td>
+                <td>{{ livro['titulo'] }}</td>
+                <td>{{ livro['autor'] }}</td>
+                <td>{{ livro['ano'] }}</td>
+
+                <td>
+                    <form method="POST"
+                          action="{{ url_for('auth.excluir_livro', livro_id=livro['id']) }}"
+                          onsubmit="return confirm('Tem certeza que deseja excluir este livro?');">
+
+                        <button type="submit" class="btn-excluir">
+                            Excluir
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    Você ainda não cadastrou nenhum livro.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</main>
+
+</body>
+</html>

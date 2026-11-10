@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+
+{% block title %}Criar Conta - Biblioteca{% endblock %}
+
+{% block content %}
+
+<div class="auth-card">
+
+    <h2>📚 Criar minha conta</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <div class="mb-3">
+            <label for="username">Nome de usuário</label>
+            <input type="text" id="username" name="username"
+                   minlength="3" required autocomplete="username">
+        </div>
+
+        <div class="mb-3">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password"
+                   minlength="6" required autocomplete="new-password">
+        </div>
+
+        <button type="submit">Criar conta</button>
+
+    </form>
+
+    <p>
+        Já possui uma conta?
+        <a href="{{ url_for('auth.login') }}">Entrar</a>
+    </p>
+
+</div>
+
+{% endblock %}
